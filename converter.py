@@ -1,5 +1,4 @@
 import os
-import tkinter as tk
 
 from PIL import Image
 from tkinter import filedialog
@@ -7,25 +6,41 @@ from tkinter import filedialog
 """Iterate through each image and convert to desired type."""
 """Save the converted files with new names."""
 
+"""Allow user to select the input and output folder. No dialogue currently."""
 path = filedialog.askdirectory(initialdir="/")
-path_contents = os.listdir(path)
 save = filedialog.askdirectory()
 
-print(path)
-print(path_contents)
+"""Read the contents of the input folder."""
+path_contents = os.listdir(path)
 
-# def convert():
-files_to_convert = []
+"""Assign resize and ICO sizing."""
+width, height = 256, 256
+sizes = [(256, 256)]
 
-for contents in path_contents:
-    if (contents.endswith(".PNG") or contents.endswith(".JPG") or contents.endswith(".JPEG")
-        or contents.endswith(".BMP") or contents.endswith(".png") or contents.endswith(".jpeg")
-        or contents.endswith(".jpg") or contents.endswith(".bmp")):
-        files_to_convert.append(Image.open(f'{path}/' + contents))
+"""Create an empty list for resized and converted images."""
+resized = []
 
-# print(files_to_convert)    
 
-for i, files in enumerate(files_to_convert):
-    files.save((f'{save}/new_{i}.ico'), 'ICO', SAVE_ALL=True, sizes=[(128, 128)])
-    
-# convert()    
+def lower_case(path_contents):
+    """Make all files in the input folder lowercase."""
+    path_contents_lower = [string.lower() for string in path_contents]
+    return path_contents_lower
+
+"""Assign files from lower case function to a new list."""
+path_contents_lower = lower_case(path_contents)
+
+"""Iterate through the lower case list and only select file with the specified extensions."""
+for contents in path_contents_lower:
+    if (contents.endswith(".png") or contents.endswith(".jpg") or contents.endswith(".jpeg")
+        or contents.endswith(".bmp")):
+        """Open the image."""
+        image = Image.open((f'{path}/' + contents))
+        """Convert to RGBA."""
+        rgba = image.convert('RGBA')
+        """Add to resized list."""
+        resized.append(rgba.resize((width, height), resample=0))       
+
+"""Iterate through the images added to resized list and save them as an icon."""
+for i, files in enumerate(resized):
+    files.save((f'{save}/new_{i}.ico'), 'ICO', SAVE_ALL=True, sizes=sizes, bits=(32, 32))
+
