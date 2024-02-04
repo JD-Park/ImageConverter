@@ -9,6 +9,7 @@ from tkinter import filedialog
 
 path = filedialog.askdirectory(initialdir="/")
 path_contents = os.listdir(path)
+save = filedialog.askdirectory()
 
 print(path)
 print(path_contents)
@@ -25,6 +26,6 @@ for contents in path_contents:
 # print(files_to_convert)    
 
 for i, files in enumerate(files_to_convert):
-    files.save((f'Converted/new_{i}.ico'), 'ICO', SAVE_ALL=True, sizes=[(128, 128)])
+    files.save((f'{save}/new_{i}.ico'), 'ICO', SAVE_ALL=True, sizes=[(128, 128)])
     
 # convert()    
