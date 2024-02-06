@@ -3,8 +3,8 @@ import os
 from PIL import Image
 from tkinter import filedialog
 
-"""Iterate through each image and convert to desired type."""
-"""Save the converted files with new names."""
+"""Iterate through each image and convert."""
+"""Save each converted files with a new name."""
 
 """Allow user to select the input and output folder. No dialogue currently."""
 path = filedialog.askdirectory(initialdir="/")
@@ -13,13 +13,12 @@ save = filedialog.askdirectory()
 """Read the contents of the input folder."""
 path_contents = os.listdir(path)
 
-"""Assign resize and ICO sizing."""
+"""Create variables for resizing image and creating the ICO"""
 width, height = 256, 256
 sizes = [(256, 256)]
 
 """Create an empty list for resized and converted images."""
 resized = []
-
 
 def lower_case(path_contents):
     """Make all files in the input folder lowercase."""
@@ -37,10 +36,10 @@ for contents in path_contents_lower:
         image = Image.open((f'{path}/' + contents))
         """Convert to RGBA."""
         rgba = image.convert('RGBA')
-        """Add to resized list."""
+        """Resize the image and add to resized list."""
         resized.append(rgba.resize((width, height), resample=0))       
 
-"""Iterate through the images added to resized list and save them as an icon."""
+"""Iterate through the images added to the resized list and save them as an ICO."""
 for i, files in enumerate(resized):
     files.save((f'{save}/new_{i}.ico'), 'ICO', SAVE_ALL=True, sizes=sizes, bits=(32, 32))
 
